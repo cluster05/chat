@@ -96,8 +96,7 @@ func (ac *authController) registerHandler(ctx *gin.Context) {
 		UpdatedAt: time.Now().Unix(),
 	}
 
-	c := ctx.Request.Context()
-	err = ac.service.register(c, auth)
+	err = ac.service.register(ctx.Request.Context(), auth)
 	if err != nil {
 		response.InternalServerError(ctx, err.Error())
 		return
@@ -123,8 +122,7 @@ func (ac *authController) loginHandler(ctx *gin.Context) {
 		Password: trim(authDTO.Password),
 	}
 
-	c := ctx.Request.Context()
-	err := ac.service.login(c, auth)
+	err := ac.service.login(ctx.Request.Context(), auth)
 	if err != nil {
 		response.NotFound(ctx, err.Error())
 		return
