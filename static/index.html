@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mChat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .chat-message {
+            width: max-content;
+        }
+    </style>
+</head>
+
+<body class="">
+    <div class="flex justify-between">
+        <h1 class="m-2 p-2 text-3xl">mChat</h1>
+        <div class="flex">
+            <input class="w-60 m-2 p-2 rounded border" type="text" id="username" name="username"
+                placeholder="type username here..." />
+            <button class="m-2 px-4 py-2 text-blue-50 bg-blue-400 hover:bg-blue-500 rounded" id="setusername">
+                set username
+            </button>
+        </div>
+        <div class="flex">
+            <input class="w-60 m-2 p-2 rounded border" type="text" id="room" name="room"
+                placeholder="type room here..." />
+            <button class="m-2 px-4 py-2 text-blue-50 bg-blue-400 hover:bg-blue-500 rounded" id="join">
+                join
+            </button>
+        </div>
+    </div>
+<div>
+        <ul id="chat" class="p-3 w-full">
+
+        </ul>
+    </div>
+    <div class="w-full p-1 bg-gray-50 flex absolute left-0 bottom-0">
+
+        <div class="w-full p-1 bg-gray-50 flex absolute left-0 bottom-0">
+            <input class="w-full m-2 p-2 rounded border" type="text" id="message" name="message"
+                placeholder="type message here..." />
+            <button class="m-2 px-4 py-2 text-blue-50 bg-blue-400 hover:bg-blue-500 rounded" id="send">
+                send
+            </button>
+        </div>
+
+        <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+        <script defer>
+            const socket = io('/chat');
+            var roomId = ""
+            var username = ""
+
+            socket.on("error", (error) => {
+                console.log("error")
+            })
+
+            let chat = document.getElementById("chat");
+            
+            let usernameInput = document.getElementById("username");
+            let setusername = document.getElementById("setusername");
+
+            setusername.addEventListener("click", () => {
+                username = usernameInput.value
+                console.log("set new USER NAME ", usernameInput.value)
+                usernameInput.value = "USERNAME SET TO " +  username 
+            })
+
+            let room = document.getElementById("room");
+            let join = document.getElementById("join");
+
+            // var temp = localStorage.getItem("roomId")
+            // if (temp){
+            //     roomId = temp
+            //     socket.emit("join", roomId)
+            //     room.value = "ROOM ID " +  roomId + " connected"
+            // }
+
+            join.addEventListener("click", () => {
+                roomId = room.value
+                console.log("joining ROOM ID ", room.value)
+                socket.emit("join", room.value)
+                localStorage.setItem("roomId",room.value)
+                room.value = "ROOM ID " +  room.value + " connected"
+            })
+
+            let message = document.getElementById("message");
+            let send = document.getElementById("send");
+
+
+            send.addEventListener("click", () => {
+
+                if(!username){
+                    alert("please addd your username")
+                    return
+                }
+                if(!roomId){
+                    alert("please join the room first")
+                    return
+                }
+                console.log("sending message in ROOM ID ", roomId, " MESSAGE ",message.value);
+                socket.emit("message", roomId,message.value,username);
+                message.value = ""
+            });
+
+            socket.on("message", (messageChat,messageFrom) => {
+
+                let message = document.createElement("span")
+                message.innerHTML = messageChat 
+                message.classList = "text-lg mr-1"
+
+                let from = document.createElement("span")
+                from.innerHTML = " - "+messageFrom
+                from.classList = "text-sm"
+
+                let div = document.createElement("div")
+                div.appendChild(message)
+                div.appendChild(from)
+                div.classList = "m-1 px-4 py-2 rounded border bg-gray-100 text-gray-600 chat-message"
+
+                let li = document.createElement("li")
+                if (username == messageFrom){
+                    li.classList = "flex justify-end"
+                }else{
+                    li.classList = "flex justify-start"
+                }
+                li.appendChild(div)
+                chat.appendChild(li)
+            })
+        </script>
+</body>
+
+</html>
