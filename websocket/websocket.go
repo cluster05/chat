@@ -17,14 +17,10 @@ var (
 	CollectionChat = "chat"
 )
 
-func InitSocketIO(router *gin.Engine) *socketio.Server {
+func InitSocketIO(router *gin.Engine, datasource *database.DataSource) *socketio.Server {
 
 	server := socketio.NewServer(nil)
-	mongodb, err := database.InitDatabase()
-	if err != nil {
-		log.Fatalln("Error", err)
-	}
-	chatCollections := mongodb.MongoDB.Database(DBMongo).Collection(CollectionChat)
+	chatCollections := datasource.MongoDB.Database(DBMongo).Collection(CollectionChat)
 
 	server.OnConnect("/", func(s socketio.Conn) error {
 		return nil
