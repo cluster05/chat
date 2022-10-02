@@ -73,7 +73,7 @@ func (fc *friendshipController) deleteFriendshipHandler(ctx *gin.Context) {
 		return
 	}
 
-	err := fc.service.deleteFriendship(ctx.Request.Context(), deleteFriendshipDTO.FriendshipId)
+	err := fc.service.deleteFriendship(ctx.Request.Context(), deleteFriendshipDTO)
 	if err != nil {
 		response.BadRequest(ctx, err.Error())
 		return

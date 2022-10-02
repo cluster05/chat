@@ -16,7 +16,7 @@ var (
 type FriendshipService interface {
 	createFriendship(context.Context, Friendship) error
 	getFriendship(context.Context, string) ([]Friendship, error)
-	deleteFriendship(context.Context, string) error
+	deleteFriendship(context.Context, DeleteFriendshipDTO) error
 }
 
 type friendshipService struct {
@@ -71,20 +71,30 @@ func (fs *friendshipService) getFriendship(ctx context.Context, meId string) ([]
 
 }
 
-func (fs *friendshipService) deleteFriendship(ctx context.Context, friendshipId string) error {
+func (fs *friendshipService) deleteFriendship(ctx context.Context, deleteFriendshipDTO DeleteFriendshipDTO) error {
 	friendshipCollection := fs.MongoDB.Database(DBMongo).Collection(CollectionFriendship)
 
 	find := bson.M{
-		"friendshipId": friendshipId,
+		"meId":     deleteFriendshipDTO.MeId,
+		"friendId": deleteFriendshipDTO.FriendId,
 	}
 
 	update := bson.M{
 		"$set": bson.M{
-			"isDeleted": false,
+			"isDeleted": true,
 		},
 	}
 
 	err := friendshipCollection.FindOneAndUpdate(ctx, find, update).Err()
+	if err != nil {
+		return err
+	}
+
+	find = bson.M{
+		"meId":     deleteFriendshipDTO.FriendId,
+		"friendId": deleteFriendshipDTO.MeId,
+	}
+	err = friendshipCollection.FindOneAndUpdate(ctx, find, update).Err()
 	if err != nil {
 		return err
 	}

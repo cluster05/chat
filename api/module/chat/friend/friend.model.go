@@ -19,5 +19,6 @@ type GetFriendListDTO struct {
 }
 
 type DeleteFriendshipDTO struct {
-	FriendshipId string `json:"friendshipId" binding:"required"`
+	MeId     string `json:"meId" binding:"required"`
+	FriendId string `json:"friendId" binding:"required"`
 }
