@@ -2,6 +2,7 @@ package personal
 
 type PersonalChat struct {
 	PersonalChatId string `bson:"personalChatId" json:"personalChatId"`
+	FriendshipId   string `bson:"friendshipId" json:"friendshipId"`
 	From           string `bson:"from" json:"from"`
 	To             string `bson:"to" json:"to"`
 	Message        string `bson:"message" json:"message"`

@@ -45,6 +45,7 @@ func InitSocketIO(router *gin.Engine) *socketio.Server {
 
 		chat := personal.PersonalChat{
 			PersonalChatId: ksuid.New().String(),
+			FriendshipId:   personalChatDTO.FriendshipId,
 			From:           personalChatDTO.From,
 			To:             personalChatDTO.To,
 			Message:        personalChatDTO.Message,
