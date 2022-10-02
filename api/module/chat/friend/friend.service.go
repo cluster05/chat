@@ -37,12 +37,6 @@ func (fs *friendshipService) createFriendship(ctx context.Context, friendship Fr
 		return err
 	}
 
-	friendship.MeId, friendship.FriendId = friendship.FriendId, friendship.MeId
-	_, err = friendshipCollection.InsertOne(ctx, friendship)
-	if err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -90,13 +84,5 @@ func (fs *friendshipService) deleteFriendship(ctx context.Context, deleteFriends
 		return err
 	}
 
-	find = bson.M{
-		"meId":     deleteFriendshipDTO.FriendId,
-		"friendId": deleteFriendshipDTO.MeId,
-	}
-	err = friendshipCollection.FindOneAndUpdate(ctx, find, update).Err()
-	if err != nil {
-		return err
-	}
 	return nil
 }
