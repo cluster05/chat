@@ -117,14 +117,9 @@ func (ac *authController) loginHandler(ctx *gin.Context) {
 		return
 	}
 
-	auth := Auth{
-		Username: trim(authDTO.Username),
-		Password: trim(authDTO.Password),
-	}
-
-	err := ac.service.login(ctx.Request.Context(), auth)
-	if err != nil {
-		response.NotFound(ctx, err.Error())
+	auth, _ := ac.service.checkAuth(ctx.Request.Context(), authDTO.Username)
+	if auth.AuthId == "" {
+		response.BadRequest(ctx, "account not exists")
 		return
 	}
 

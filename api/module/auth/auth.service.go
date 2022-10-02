@@ -68,12 +68,9 @@ func (as *authService) login(ctx context.Context, auth Auth) error {
 	}
 
 	var dbAuth Auth
-	err := authCollection.FindOne(ctx, query).Decode(&dbAuth)
-	if err != nil {
-		return fmt.Errorf("account not found")
-	}
+	authCollection.FindOne(ctx, query).Decode(&dbAuth)
 
-	if err = comparePassword(dbAuth.Password, auth.Password); err != nil {
+	if err := comparePassword(dbAuth.Password, auth.Password); err != nil {
 		return fmt.Errorf("invalid credentails")
 	}
 
