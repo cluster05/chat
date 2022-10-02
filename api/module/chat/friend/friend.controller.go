@@ -43,10 +43,12 @@ func (fc *friendshipController) createFriendshipHandler(ctx *gin.Context) {
 	err := fc.service.createFriendship(ctx.Request.Context(), friendship)
 	if err != nil {
 		response.InternalServerError(ctx, err.Error())
+		return
 	}
 
 	response.Created(ctx, friendship)
 }
+
 func (fc *friendshipController) getFriendshipHandler(ctx *gin.Context) {
 
 	var getFriendListDTO GetFriendListDTO
@@ -58,6 +60,7 @@ func (fc *friendshipController) getFriendshipHandler(ctx *gin.Context) {
 	friendslist, err := fc.service.getFriendship(ctx.Request.Context(), getFriendListDTO.MeId)
 	if err != nil {
 		response.BadRequest(ctx, err.Error())
+		return
 	}
 
 	response.OK(ctx, friendslist)
@@ -73,6 +76,7 @@ func (fc *friendshipController) deleteFriendshipHandler(ctx *gin.Context) {
 	err := fc.service.deleteFriendship(ctx.Request.Context(), deleteFriendshipDTO.FriendshipId)
 	if err != nil {
 		response.BadRequest(ctx, err.Error())
+		return
 	}
 
 	response.OK(ctx, "unfriend done")

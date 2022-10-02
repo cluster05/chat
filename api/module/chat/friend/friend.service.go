@@ -32,26 +32,18 @@ func NewFriendshipService(datasource database.DataSource) FriendshipService {
 func (fs *friendshipService) createFriendship(ctx context.Context, friendship Friendship) error {
 	friendshipCollection := fs.MongoDB.Database(DBMongo).Collection(CollectionFriendship)
 
-	return friendshipCollection.Database().Client().UseSession(ctx, func(sc mongo.SessionContext) error {
-		err := sc.StartTransaction()
-		if err != nil {
-			return err
-		}
+	_, err := friendshipCollection.InsertOne(ctx, friendship)
+	if err != nil {
+		return err
+	}
 
-		_, err = friendshipCollection.InsertOne(sc, friendship)
-		if err != nil {
-			return err
-		}
+	friendship.MeId, friendship.FriendId = friendship.FriendId, friendship.MeId
+	_, err = friendshipCollection.InsertOne(ctx, friendship)
+	if err != nil {
+		return err
+	}
 
-		friendship.MeId, friendship.FriendId = friendship.FriendshipId, friendship.MeId
-		_, err = friendshipCollection.InsertOne(sc, friendship)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	})
-
+	return nil
 }
 
 func (fs *friendshipService) getFriendship(ctx context.Context, meId string) ([]Friendship, error) {
