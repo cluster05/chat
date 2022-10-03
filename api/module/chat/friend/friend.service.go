@@ -2,6 +2,7 @@ package friend
 
 import (
 	"context"
+	"fmt"
 	"web-chat/database"
 	"web-chat/pkg/mongoquerybuilder"
 
@@ -36,7 +37,32 @@ func NewFriendshipService(datasource database.DataSource) FriendshipService {
 func (fs *friendshipService) createFriendship(ctx context.Context, friendship Friendship) error {
 	friendshipCollection := fs.MongoDB.Database(DBMongo).Collection(CollectionFriendship)
 
-	_, err := friendshipCollection.InsertOne(ctx, friendship)
+	query := mongoquerybuilder.Query{
+		Query: `{
+			"$and": [{ "meId": "~1" }, { "friendId": "~2" }],
+			"isDeleted": false
+		  }`,
+		Params: mongoquerybuilder.Params{friendship.MeId, friendship.FriendId},
+	}
+
+	find, err := query.QueryBuilder()
+	if err != nil {
+		return fmt.Errorf("invalid loader qeury")
+	}
+
+	cursor, err := friendshipCollection.Find(ctx, find.Query)
+	if err != nil {
+		return err
+	}
+
+	var dupliateEntry []Friendship = []Friendship{}
+	cursor.All(ctx, &dupliateEntry)
+
+	if len(dupliateEntry) > 0 {
+		return fmt.Errorf("already friend")
+	}
+
+	_, err = friendshipCollection.InsertOne(ctx, friendship)
 	if err != nil {
 		return err
 	}
@@ -74,12 +100,9 @@ func (fs *friendshipService) getFriendship(ctx context.Context, meId string) ([]
 			  "$unwind": "$info"
 			},
 			{
-			  "$set": {
+			  "$addFields": {
 				"friendName": "$info.username"
 			  }
-			},
-			{
-			  "$unset": "info"
 			}
 		  ]`,
 		Params: mongoquerybuilder.Params{meId},

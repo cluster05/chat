@@ -42,6 +42,11 @@ func (fc *friendshipController) createFriendshipHandler(ctx *gin.Context) {
 	}
 
 	err := fc.service.createFriendship(ctx.Request.Context(), friendship)
+	if err != nil && err.Error() == "already friend" {
+		response.BadRequest(ctx, err.Error())
+		return
+	}
+
 	if err != nil {
 		response.InternalServerError(ctx, err.Error())
 		return
