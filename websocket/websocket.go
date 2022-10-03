@@ -1,7 +1,6 @@
 package websocket
 
 import (
-	"context"
 	"log"
 	"time"
 	"web-chat/api/module/chat/personal"
@@ -20,13 +19,16 @@ var (
 func InitSocketIO(router *gin.Engine, datasource *database.DataSource) *socketio.Server {
 
 	server := socketio.NewServer(nil)
-	chatCollections := datasource.MongoDB.Database(DBMongo).Collection(CollectionChat)
+	// chatCollections := datasource.MongoDB.Database(DBMongo).Collection(CollectionChat)
 
 	server.OnConnect("/", func(s socketio.Conn) error {
+		log.Println("[socket][connect]")
+
 		return nil
 	})
 
 	server.OnDisconnect("/", func(s socketio.Conn, reason string) {
+		log.Println("[socket][dis-connect]")
 	})
 
 	server.OnError("/", func(s socketio.Conn, err error) {
@@ -34,10 +36,13 @@ func InitSocketIO(router *gin.Engine, datasource *database.DataSource) *socketio
 	})
 
 	server.OnEvent("/chat", "join", func(socket socketio.Conn, friendshipId string) {
+		log.Println("[server][join room] ", friendshipId)
 		server.JoinRoom("/chat", friendshipId, socket)
 	})
 
 	server.OnEvent("/chat", "message", func(socket socketio.Conn, personalChatDTO personal.PersonalChatDTO) {
+
+		log.Println("[server][receive message] ", personalChatDTO)
 
 		chat := personal.PersonalChat{
 			PersonalChatId: ksuid.New().String(),
@@ -49,7 +54,11 @@ func InitSocketIO(router *gin.Engine, datasource *database.DataSource) *socketio
 			UpdatedAt:      time.Now().Unix(),
 		}
 
-		chatCollections.InsertOne(context.TODO(), chat)
+		log.Println(chat)
+
+		// ctx, _ := context.WithTimeout(context.TODO(), time.Second*5)
+		// chatCollections.InsertOne(ctx, chat)
+
 		server.BroadcastToRoom("/chat", personalChatDTO.FriendshipId, "message", chat)
 	})
 
