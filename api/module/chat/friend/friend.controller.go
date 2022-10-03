@@ -13,6 +13,7 @@ type FriendshipController interface {
 	createFriendshipHandler(*gin.Context)
 	getFriendshipHandler(*gin.Context)
 	deleteFriendshipHandler(*gin.Context)
+	searchFriendshipHandler(*gin.Context)
 }
 
 type friendshipController struct {
@@ -80,4 +81,20 @@ func (fc *friendshipController) deleteFriendshipHandler(ctx *gin.Context) {
 	}
 
 	response.OK(ctx, "unfriend done")
+}
+
+func (fc *friendshipController) searchFriendshipHandler(ctx *gin.Context) {
+	var searchFriendshipDTO SearchFriendshipDTO
+	if valid := validation.Bind(ctx, &searchFriendshipDTO); !valid {
+		return
+	}
+
+	searchlist, err := fc.service.searchFriendship(ctx.Request.Context(), searchFriendshipDTO)
+	if err != nil {
+		response.BadRequest(ctx, err.Error())
+		return
+	}
+
+	response.OK(ctx, searchlist)
+
 }
