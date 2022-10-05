@@ -23,12 +23,11 @@ func InitSocketIO(router *gin.Engine, datasource *database.DataSource) *socketio
 
 	server.OnConnect("/", func(s socketio.Conn) error {
 		log.Println("[socket][connect]")
-
 		return nil
 	})
 
 	server.OnDisconnect("/", func(s socketio.Conn, reason string) {
-		log.Println("[socket][dis-connect]")
+		log.Println("[socket][disconnect]")
 	})
 
 	server.OnError("/", func(s socketio.Conn, err error) {
@@ -40,26 +39,27 @@ func InitSocketIO(router *gin.Engine, datasource *database.DataSource) *socketio
 		server.JoinRoom("/chat", friendshipId, socket)
 	})
 
-	server.OnEvent("/chat", "message", func(socket socketio.Conn, personalChatDTO personal.PersonalChatDTO) {
-
-		log.Println("[server][receive message] ", personalChatDTO)
-
+	server.OnEvent("/chat", "message", func(socket socketio.Conn, payload map[string]string) {
 		chat := personal.PersonalChat{
 			PersonalChatId: ksuid.New().String(),
-			FriendshipId:   personalChatDTO.FriendshipId,
-			From:           personalChatDTO.From,
-			To:             personalChatDTO.To,
-			Message:        personalChatDTO.Message,
+			FriendshipId:   payload["friendshipId"],
+			From:           payload["from"],
+			To:             payload["to"],
+			Message:        payload["message"],
 			CreatedAt:      time.Now().Unix(),
 			UpdatedAt:      time.Now().Unix(),
 		}
 
-		log.Println(chat)
+		friendshipId, ok := payload["friendshipId"]
+		if ok {
+			success := server.BroadcastToRoom("/chat", friendshipId, "message", chat)
+			if success {
+				log.Println("[socket][broadcast to room] ", success)
+			}
+		}
 
 		// ctx, _ := context.WithTimeout(context.TODO(), time.Second*5)
 		// chatCollections.InsertOne(ctx, chat)
-
-		server.BroadcastToRoom("/chat", personalChatDTO.FriendshipId, "message", chat)
 	})
 
 	router.GET("/socket.io/*any", gin.WrapH(server))

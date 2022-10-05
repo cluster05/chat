@@ -2,6 +2,7 @@ package api
 
 import (
 	"log"
+	"net/http"
 	"web-chat/api/middlewere"
 	"web-chat/database"
 	"web-chat/websocket"
@@ -22,6 +23,7 @@ func InitRouter() (*gin.Engine, error) {
 
 	websocket.InitSocketIO(router, datasource)
 	log.Println("[socket][init]")
+	router.StaticFS("/static", http.Dir("static"))
 
 	HandlerSetup(router, datasource)
 	return router, nil
