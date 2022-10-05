@@ -35,9 +35,9 @@ func InitSocketIO(router *gin.Engine, datasource *database.DataSource) *socketio
 		log.Println("[socket][connection error]", err)
 	})
 
-	server.OnEvent("/chat", "join", func(socket socketio.Conn, friendshipId string) {
-		log.Println("[server][join room] ", friendshipId)
-		server.JoinRoom("/chat", friendshipId, socket)
+	server.OnEvent("/chat", "join", func(socket socketio.Conn, authId string) {
+		log.Println("[server][join room] ", authId)
+		server.JoinRoom("/chat", authId, socket)
 	})
 
 	server.OnEvent("/chat", "message", func(socket socketio.Conn, payload map[string]string) {
@@ -52,18 +52,19 @@ func InitSocketIO(router *gin.Engine, datasource *database.DataSource) *socketio
 			IsDeleted:      false,
 		}
 
-		friendshipId, ok := payload["friendshipId"]
-		if ok {
-			success := server.BroadcastToRoom("/chat", friendshipId, "message", chat)
-			if success {
-				log.Println("[socket][broadcast to room] ", success)
-				ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
-				defer cancel()
-				_, err := chatCollections.InsertOne(ctx, chat)
-				if err != nil {
-					log.Println("[socket][chat saving error]", err)
-				}
-			}
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+		defer cancel()
+		_, err := chatCollections.InsertOne(ctx, chat)
+		if err != nil {
+			log.Println("[socket][chat saving error]", err)
+		}
+
+		if err == nil {
+			to := payload["to"]
+			from := payload["from"]
+
+			server.BroadcastToRoom("/chat", to, "message", chat)
+			server.BroadcastToRoom("/chat", from, "message", chat)
 		}
 
 	})
