@@ -1,6 +1,7 @@
 package websocket
 
 import (
+	"context"
 	"log"
 	"time"
 	"web-chat/api/module/chat/personal"
@@ -19,7 +20,7 @@ var (
 func InitSocketIO(router *gin.Engine, datasource *database.DataSource) *socketio.Server {
 
 	server := socketio.NewServer(nil)
-	// chatCollections := datasource.MongoDB.Database(DBMongo).Collection(CollectionChat)
+	chatCollections := datasource.MongoDB.Database(DBMongo).Collection(CollectionChat)
 
 	server.OnConnect("/", func(s socketio.Conn) error {
 		log.Println("[socket][connect]")
@@ -55,11 +56,15 @@ func InitSocketIO(router *gin.Engine, datasource *database.DataSource) *socketio
 			success := server.BroadcastToRoom("/chat", friendshipId, "message", chat)
 			if success {
 				log.Println("[socket][broadcast to room] ", success)
+				ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+				defer cancel()
+				_, err := chatCollections.InsertOne(ctx, chat)
+				if err != nil {
+					log.Println("[socket][chat saving error]", err)
+				}
 			}
 		}
 
-		// ctx, _ := context.WithTimeout(context.TODO(), time.Second*5)
-		// chatCollections.InsertOne(ctx, chat)
 	})
 
 	router.GET("/socket.io/*any", gin.WrapH(server))
