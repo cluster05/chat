@@ -8,6 +8,7 @@ type PersonalChat struct {
 	Message        string `bson:"message" json:"message"`
 	CreatedAt      int64  `bson:"createdAt" json:"createdAt"`
 	UpdatedAt      int64  `bson:"updatedAt" json:"updatedAt"`
+	IsDeleted      bool   `bson:"isDeleted" json:"isDeleted"`
 }
 
 type PersonalChatDTO struct {
@@ -15,4 +16,8 @@ type PersonalChatDTO struct {
 	From         string `json:"from" binding:"required"`
 	To           string `json:"to" binding:"required"`
 	Message      string `json:"message" binding:"required"`
+}
+
+type GetPersonalChatDTO struct {
+	FriendshipId string `json:"friendshipId" binding:"required"`
 }

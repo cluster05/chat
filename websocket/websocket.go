@@ -49,6 +49,7 @@ func InitSocketIO(router *gin.Engine, datasource *database.DataSource) *socketio
 			Message:        payload["message"],
 			CreatedAt:      time.Now().Unix(),
 			UpdatedAt:      time.Now().Unix(),
+			IsDeleted:      false,
 		}
 
 		friendshipId, ok := payload["friendshipId"]

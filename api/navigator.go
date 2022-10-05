@@ -5,6 +5,7 @@ import (
 	"web-chat/api/middlewere"
 	"web-chat/api/module/auth"
 	"web-chat/api/module/chat/friend"
+	"web-chat/api/module/chat/personal"
 	"web-chat/database"
 	"web-chat/pkg/response"
 	"web-chat/types"
@@ -41,4 +42,5 @@ func HandlerSetup(router *gin.Engine, datasource *database.DataSource) {
 func routing(router *types.Router, datasource *database.DataSource) {
 	auth.NewAuthRoute(auth.NewAuthController(auth.NewAuthService(*datasource)), router).Route()
 	friend.NewAuthRoute(friend.NewFrinshipController(friend.NewFriendshipService(*datasource)), router).Route()
+	personal.NewPersonalChatRoute(personal.NewPersonalChatController(personal.NewPersonalChatService(*datasource)), router).Route()
 }
