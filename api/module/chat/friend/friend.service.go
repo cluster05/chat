@@ -151,19 +151,10 @@ func (fs *friendshipService) searchFriendship(ctx context.Context, searchFriends
 	authCollection := fs.MongoDB.Database(DBMongo).Collection(CollectionAuth)
 
 	find := bson.M{
-		"$and": []bson.M{
-			{
-				"username": bson.M{
-					"$regex": primitive.Regex{
-						Pattern: "^" + searchFriendshipDTO.Filter + ".*",
-						Options: "i",
-					},
-				},
-			},
-			{
-				"username": bson.M{
-					"$ne": myusername,
-				},
+		"username": bson.M{
+			"$regex": primitive.Regex{
+				Pattern: "^" + searchFriendshipDTO.Filter + ".*",
+				Options: "i",
 			},
 		},
 	}

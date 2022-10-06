@@ -79,7 +79,7 @@ func (ac *authController) registerHandler(ctx *gin.Context) {
 
 	isPresent, _ := ac.service.checkAuth(ctx.Request.Context(), authDTO.Username)
 	if isPresent.AuthId != "" {
-		response.BadRequest(ctx, "account already exists")
+		response.BadRequest(ctx, "given username is already exists")
 		return
 	}
 
@@ -119,7 +119,7 @@ func (ac *authController) loginHandler(ctx *gin.Context) {
 
 	auth, _ := ac.service.checkAuth(ctx.Request.Context(), authDTO.Username)
 	if auth.AuthId == "" {
-		response.BadRequest(ctx, "account not exists")
+		response.BadRequest(ctx, "account with given username not exists")
 		return
 	}
 
