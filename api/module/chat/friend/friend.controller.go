@@ -1,7 +1,9 @@
 package friend
 
 import (
+	"encoding/json"
 	"time"
+	"web-chat/api/module/auth"
 	"web-chat/pkg/response"
 	"web-chat/pkg/validation"
 
@@ -29,6 +31,11 @@ func NewFrinshipController(service FriendshipService) FriendshipController {
 func (fc *friendshipController) createFriendshipHandler(ctx *gin.Context) {
 	var createFriendshipDTO CreateFriendshipDTO
 	if valid := validation.Bind(ctx, &createFriendshipDTO); !valid {
+		return
+	}
+
+	if createFriendshipDTO.MeId == createFriendshipDTO.FriendId {
+		response.BadRequest(ctx, "you cannot friend with yourself")
 		return
 	}
 
@@ -94,7 +101,11 @@ func (fc *friendshipController) searchFriendshipHandler(ctx *gin.Context) {
 		return
 	}
 
-	searchlist, err := fc.service.searchFriendship(ctx.Request.Context(), searchFriendshipDTO)
+	var user auth.JWTUser
+	reqUser := ctx.Request.Header.Get("user")
+	json.Unmarshal([]byte(reqUser), &user)
+
+	searchlist, err := fc.service.searchFriendship(ctx.Request.Context(), searchFriendshipDTO, user.Username)
 	if err != nil {
 		response.BadRequest(ctx, err.Error())
 		return

@@ -1,9 +1,11 @@
 package middlewere
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
+	"web-chat/api/module/auth"
 	"web-chat/pkg/response"
 
 	"github.com/dgrijalva/jwt-go"
@@ -47,6 +49,21 @@ func tokenValid(r *http.Request) error {
 	return nil
 }
 
+func getUser(r *http.Request) (string, error) {
+	token, err := verifyToken(r)
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if ok && token.Valid {
+		user := auth.JWTUser{
+			AuthId:   fmt.Sprintf("%s", claims["authId"]),
+			Username: fmt.Sprintf("%s", claims["username"]),
+		}
+		reqUser, _ := json.Marshal(&user)
+		return string(reqUser), nil
+	}
+
+	return "", err
+}
+
 func Auth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		err := tokenValid(ctx.Request)
@@ -55,6 +72,10 @@ func Auth() gin.HandlerFunc {
 			ctx.Abort()
 			return
 		}
+
+		user, _ := getUser(ctx.Request)
+		ctx.Request.Header.Add("user", user)
 		ctx.Next()
+
 	}
 }

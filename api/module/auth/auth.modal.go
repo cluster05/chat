@@ -22,3 +22,8 @@ type ChangePasswordDTO struct {
 type ForgotPasswordDTO struct {
 	Username string `json:"username" binding:"required,min=2,max=15"`
 }
+
+type JWTUser struct {
+	AuthId   string `json:"authId"`
+	Username string `json:"username"`
+}

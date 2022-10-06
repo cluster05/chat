@@ -21,7 +21,7 @@ type FriendshipService interface {
 	createFriendship(context.Context, Friendship) error
 	getFriendship(context.Context, string) ([]FriendshipResult, error)
 	deleteFriendship(context.Context, DeleteFriendshipDTO) error
-	searchFriendship(context.Context, SearchFriendshipDTO) ([]Search, error)
+	searchFriendship(context.Context, SearchFriendshipDTO, string) ([]Search, error)
 }
 
 type friendshipService struct {
@@ -147,14 +147,23 @@ func (fs *friendshipService) deleteFriendship(ctx context.Context, deleteFriends
 	return nil
 }
 
-func (fs *friendshipService) searchFriendship(ctx context.Context, searchFriendshipDTO SearchFriendshipDTO) ([]Search, error) {
+func (fs *friendshipService) searchFriendship(ctx context.Context, searchFriendshipDTO SearchFriendshipDTO, myusername string) ([]Search, error) {
 	authCollection := fs.MongoDB.Database(DBMongo).Collection(CollectionAuth)
 
 	find := bson.M{
-		"username": bson.M{
-			"$regex": primitive.Regex{
-				Pattern: "^" + searchFriendshipDTO.Filter + ".*",
-				Options: "i",
+		"$and": []bson.M{
+			{
+				"username": bson.M{
+					"$regex": primitive.Regex{
+						Pattern: "^" + searchFriendshipDTO.Filter + ".*",
+						Options: "i",
+					},
+				},
+			},
+			{
+				"username": bson.M{
+					"$ne": myusername,
+				},
 			},
 		},
 	}
