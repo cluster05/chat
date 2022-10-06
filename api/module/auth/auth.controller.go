@@ -123,6 +123,11 @@ func (ac *authController) loginHandler(ctx *gin.Context) {
 		return
 	}
 
+	if err := comparePassword(auth.Password, authDTO.Password); err != nil {
+		response.BadRequest(ctx, "invalid credentails")
+		return
+	}
+
 	token, err := generateJWT(auth)
 	if err != nil {
 		response.InternalServerError(ctx, err.Error())

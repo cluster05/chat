@@ -59,24 +59,7 @@ func (as *authService) register(ctx context.Context, auth Auth) error {
 	return nil
 
 }
-func (as *authService) login(ctx context.Context, auth Auth) error {
 
-	authCollection := as.MongoDB.Database(DBMongo).Collection(CollectionAuth)
-
-	query := bson.M{
-		"username": auth.Username,
-	}
-
-	var dbAuth Auth
-	authCollection.FindOne(ctx, query).Decode(&dbAuth)
-
-	if err := comparePassword(dbAuth.Password, auth.Password); err != nil {
-		return fmt.Errorf("invalid credentails")
-	}
-
-	return nil
-
-}
 func (as *authService) changePassword(ctx context.Context, auth Auth) error {
 
 	authCollection := as.MongoDB.Database(DBMongo).Collection(CollectionAuth)
