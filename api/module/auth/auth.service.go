@@ -17,7 +17,6 @@ var (
 type AuthService interface {
 	checkAuth(context.Context, string) (Auth, error)
 	register(context.Context, Auth) error
-	login(context.Context, Auth) error
 	changePassword(context.Context, Auth) error
 }
 
