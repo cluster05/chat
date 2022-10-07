@@ -23,11 +23,13 @@ func run() error {
 	if err := setupEnviroment(); err != nil {
 		return err
 	}
+	log.Println("[server][setupEnviroment][done]")
 
 	router, err := api.InitRouter()
 	if err != nil {
 		return err
 	}
+	log.Println("[server][InitRouter][done]")
 
 	server := http.Server{
 		Addr:           fmt.Sprintf(":%s", config.ServerConfig.Port),
@@ -61,6 +63,7 @@ func setupEnviroment() error {
 	if err := config.Setup(*env); err != nil {
 		return err
 	}
+	log.Println("[server][config.Setup][done]", *env)
 
 	return nil
 }

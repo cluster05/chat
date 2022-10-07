@@ -15,16 +15,16 @@ import (
 
 func HandlerSetup(router *gin.Engine, datasource *database.DataSource) {
 
-	router.GET("/health", func(ctx *gin.Context) {
+	r := router.Group("/api/v1/r", middlewere.Auth())
+	o := router.Group("/api/v1/o")
+
+	o.GET("/health", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, response.Health{
 			Status:  http.StatusOK,
 			Message: "ok",
 			Health:  "up",
 		})
 	})
-
-	r := router.Group("/api/v1/r", middlewere.Auth())
-	o := router.Group("/api/v1/o")
 
 	route := &types.Router{
 		Open:       o,

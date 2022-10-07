@@ -1,6 +1,7 @@
 package api
 
 import (
+	"log"
 	"web-chat/api/middlewere"
 	"web-chat/database"
 	"web-chat/websocket"
@@ -14,12 +15,16 @@ func InitRouter() (*gin.Engine, error) {
 	if err != nil {
 		return nil, err
 	}
+	log.Println("[api][InitDatabase][done]")
 
 	router := gin.New()
 	router.Use(gin.Logger(), gin.Recovery(), middlewere.CORSMiddleware())
+	log.Println("[api][GinSetup][done]")
 
 	websocket.InitSocketIO(router, datasource)
+	log.Println("[api][Websocket][done]")
 
 	HandlerSetup(router, datasource)
+	log.Println("[api][HandlerSetup][done]")
 	return router, nil
 }
