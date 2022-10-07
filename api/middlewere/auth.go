@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 	"web-chat/api/module/auth"
+	"web-chat/config"
 	"web-chat/pkg/response"
 
 	"github.com/dgrijalva/jwt-go"
@@ -30,7 +31,7 @@ func verifyToken(r *http.Request) (*jwt.Token, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte("config.AppConfig.JWTSecret"), nil
+		return []byte(config.AppConfig.JWTSecret), nil
 	})
 	if err != nil {
 		return nil, err

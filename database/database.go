@@ -2,8 +2,10 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"sync"
 	"time"
+	"web-chat/config"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -17,7 +19,8 @@ type DataSource struct {
 
 func InitDatabase() (*DataSource, error) {
 
-	mongodb, err := initMongoDB("mongodb://localhost:27017")
+	mongoDNSUrl := fmt.Sprintf(config.DatabaseConfig.Mongo.DSN)
+	mongodb, err := initMongoDB(mongoDNSUrl)
 	if err != nil {
 		return nil, err
 	}

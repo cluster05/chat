@@ -3,6 +3,7 @@ package auth
 import (
 	"strings"
 	"time"
+	"web-chat/config"
 	"web-chat/pkg/response"
 	"web-chat/pkg/validation"
 
@@ -51,7 +52,7 @@ func comparePassword(hashPassword string, password string) error {
 
 func generateJWT(auth Auth) (string, error) {
 
-	var jwtSecret = []byte("config.AppConfig.JWTSecret")
+	var jwtSecret = []byte(config.AppConfig.JWTSecret)
 	jwtToken := jwt.New(jwt.SigningMethodHS256)
 	claims := jwtToken.Claims.(jwt.MapClaims)
 
