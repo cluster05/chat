@@ -7,24 +7,24 @@ import (
 )
 
 type Success struct {
-	Status   int         `json:"status"`
-	Message  interface{} `json:"message"`
-	Response interface{} `json:"response"`
+	Status   int `json:"status"`
+	Message  any `json:"message"`
+	Response any `json:"response"`
 }
 
 type Error struct {
-	Status  int         `json:"status"`
-	Message interface{} `json:"message"`
-	Error   interface{} `json:"error"`
+	Status  int `json:"status"`
+	Message any `json:"message"`
+	Error   any `json:"error"`
 }
 
 type Health struct {
-	Status  int         `json:"status"`
-	Message interface{} `json:"message"`
-	Health  interface{} `json:"health"`
+	Status  int `json:"status"`
+	Message any `json:"message"`
+	Health  any `json:"health"`
 }
 
-func OK(ctx *gin.Context, result interface{}) {
+func OK(ctx *gin.Context, result any) {
 	ctx.JSON(http.StatusOK, Success{
 		Status:   http.StatusOK,
 		Message:  http.StatusText(http.StatusOK),
@@ -32,7 +32,7 @@ func OK(ctx *gin.Context, result interface{}) {
 	})
 }
 
-func Created(ctx *gin.Context, result interface{}) {
+func Created(ctx *gin.Context, result any) {
 	ctx.JSON(http.StatusCreated, Success{
 		Status:   http.StatusCreated,
 		Message:  http.StatusText(http.StatusCreated),
@@ -40,7 +40,7 @@ func Created(ctx *gin.Context, result interface{}) {
 	})
 }
 
-func BadRequest(ctx *gin.Context, err interface{}) {
+func BadRequest(ctx *gin.Context, err any) {
 	ctx.JSON(http.StatusBadRequest, Error{
 		Status:  http.StatusBadRequest,
 		Message: http.StatusText(http.StatusBadRequest),
@@ -48,7 +48,7 @@ func BadRequest(ctx *gin.Context, err interface{}) {
 	})
 }
 
-func Unauthorized(ctx *gin.Context, err interface{}) {
+func Unauthorized(ctx *gin.Context, err any) {
 	ctx.JSON(http.StatusUnauthorized, Error{
 		Status:  http.StatusUnauthorized,
 		Message: http.StatusText(http.StatusUnauthorized),
@@ -56,7 +56,7 @@ func Unauthorized(ctx *gin.Context, err interface{}) {
 	})
 }
 
-func Forbidden(ctx *gin.Context, err interface{}) {
+func Forbidden(ctx *gin.Context, err any) {
 	ctx.JSON(http.StatusForbidden, Error{
 		Status:  http.StatusForbidden,
 		Message: http.StatusText(http.StatusForbidden),
@@ -64,7 +64,7 @@ func Forbidden(ctx *gin.Context, err interface{}) {
 	})
 }
 
-func NotFound(ctx *gin.Context, err interface{}) {
+func NotFound(ctx *gin.Context, err any) {
 	ctx.JSON(http.StatusNotFound, Error{
 		Status:  http.StatusNotFound,
 		Message: http.StatusText(http.StatusNotFound),
@@ -72,7 +72,7 @@ func NotFound(ctx *gin.Context, err interface{}) {
 	})
 }
 
-func InternalServerError(ctx *gin.Context, err interface{}) {
+func InternalServerError(ctx *gin.Context, err any) {
 	ctx.JSON(http.StatusInternalServerError, Error{
 		Status:  http.StatusInternalServerError,
 		Message: http.StatusText(http.StatusInternalServerError),
