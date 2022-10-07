@@ -60,7 +60,7 @@ func generateJWT(auth Auth) (string, error) {
 	claims["username"] = auth.Username
 	claims["createdAt"] = auth.CreatedAt
 	claims["iat"] = time.Now().Unix()
-	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+	claims["exp"] = time.Now().Add(time.Hour * time.Duration(config.AppConfig.TokenExpireDuration)).Unix()
 
 	token, err := jwtToken.SignedString(jwtSecret)
 

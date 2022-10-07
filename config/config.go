@@ -22,18 +22,14 @@ type app struct {
 }
 
 type server struct {
-	RunMode      string        `json:"runMode"`
 	Port         string        `json:"port"`
 	ReadTimeout  time.Duration `json:"readTimeout"`
 	WriteTimeout time.Duration `json:"writeTimeout"`
 }
 
 type DB struct {
-	DSN        string `json:"dns"`
-	DBName     string `json:"dbName"`
-	DBUsername string `json:"dbUsername"`
-	DBPassword string `json:"dbPassword"`
-	DBPort     string `json:"dbPort"`
+	DSN    string `json:"dns"`
+	DBName string `json:"dbName"`
 }
 
 type database struct {

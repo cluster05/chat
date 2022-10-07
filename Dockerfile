@@ -17,5 +17,7 @@ COPY *.go ./
 # build app for production with minification
 RUN go build -o /chatapplication
 
+EXPOSE 3000
+
 # run server
 CMD [ "/chatapplication" ]

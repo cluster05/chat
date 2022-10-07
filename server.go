@@ -56,14 +56,14 @@ func setupEnviroment() error {
 		return fmt.Errorf("invalid environment type. check --help for to check env options")
 	}
 
-	if *env == "prod" {
-		gin.SetMode(gin.ReleaseMode)
-	}
-
 	if err := config.Setup(*env); err != nil {
 		return err
 	}
-	log.Println("[server][config.Setup][done]", *env)
+	log.Println("[server][configSetup][done]", *env)
 
+	if config.AppConfig.Env == "prod" {
+		gin.SetMode(gin.ReleaseMode)
+		// config.DatabaseConfig.Mongo.DSN = os.Getenv("MONGO_DNS")
+	}
 	return nil
 }
