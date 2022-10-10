@@ -6,8 +6,9 @@ import (
 	"log"
 	"net/http"
 	"time"
-	"web-chat/api"
-	"web-chat/config"
+
+	"github.com/cluster05/chat/api"
+	"github.com/cluster05/chat/config"
 
 	"github.com/gin-gonic/gin"
 )

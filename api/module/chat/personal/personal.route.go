@@ -1,7 +1,7 @@
 package personal
 
 import (
-	"web-chat/types"
+	"github.com/cluster05/chat/types"
 )
 
 type PersonalChatRoute interface {

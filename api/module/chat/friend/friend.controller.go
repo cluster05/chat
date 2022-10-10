@@ -3,9 +3,10 @@ package friend
 import (
 	"encoding/json"
 	"time"
-	"web-chat/api/module/auth"
-	"web-chat/pkg/response"
-	"web-chat/pkg/validation"
+
+	"github.com/cluster05/chat/api/module/auth"
+	"github.com/cluster05/chat/pkg/response"
+	"github.com/cluster05/chat/pkg/validation"
 
 	"github.com/gin-gonic/gin"
 	"github.com/segmentio/ksuid"

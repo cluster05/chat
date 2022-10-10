@@ -2,9 +2,10 @@ package api
 
 import (
 	"log"
-	"web-chat/api/middlewere"
-	"web-chat/database"
-	"web-chat/websocket"
+
+	"github.com/cluster05/chat/api/middlewere"
+	"github.com/cluster05/chat/database"
+	"github.com/cluster05/chat/websocket"
 
 	"github.com/gin-gonic/gin"
 )

@@ -4,8 +4,9 @@ import (
 	"context"
 	"log"
 	"time"
-	"web-chat/api/module/chat/personal"
-	"web-chat/database"
+
+	"github.com/cluster05/chat/api/module/chat/personal"
+	"github.com/cluster05/chat/database"
 
 	"github.com/gin-gonic/gin"
 	socketio "github.com/googollee/go-socket.io"

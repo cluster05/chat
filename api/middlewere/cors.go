@@ -1,7 +1,7 @@
 package middlewere
 
 import (
-	"web-chat/config"
+	"github.com/cluster05/chat/config"
 
 	"github.com/gin-gonic/gin"
 )

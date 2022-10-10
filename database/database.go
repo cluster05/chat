@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"sync"
 	"time"
-	"web-chat/config"
+
+	"github.com/cluster05/chat/config"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

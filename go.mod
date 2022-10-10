@@ -1,15 +1,15 @@
-module web-chat
+module github.com/cluster05/chat
 
 go 1.19
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.8.1
-	github.com/go-playground/validator/v10 v10.10.0
+	github.com/go-playground/validator/v10 v10.11.1
 	github.com/googollee/go-socket.io v1.6.2
 	github.com/segmentio/ksuid v1.0.4
-	go.mongodb.org/mongo-driver v1.10.2
-	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d
+	go.mongodb.org/mongo-driver v1.10.3
+	golang.org/x/crypto v0.0.0-20221005025214-4161e89ecf1b
 )
 
 require (

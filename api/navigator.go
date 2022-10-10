@@ -2,13 +2,14 @@ package api
 
 import (
 	"net/http"
-	"web-chat/api/middlewere"
-	"web-chat/api/module/auth"
-	"web-chat/api/module/chat/friend"
-	"web-chat/api/module/chat/personal"
-	"web-chat/database"
-	"web-chat/pkg/response"
-	"web-chat/types"
+
+	"github.com/cluster05/chat/api/middlewere"
+	"github.com/cluster05/chat/api/module/auth"
+	"github.com/cluster05/chat/api/module/chat/friend"
+	"github.com/cluster05/chat/api/module/chat/personal"
+	"github.com/cluster05/chat/database"
+	"github.com/cluster05/chat/pkg/response"
+	"github.com/cluster05/chat/types"
 
 	"github.com/gin-gonic/gin"
 )

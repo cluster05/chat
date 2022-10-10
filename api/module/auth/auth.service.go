@@ -3,7 +3,8 @@ package auth
 import (
 	"context"
 	"fmt"
-	"web-chat/database"
+
+	"github.com/cluster05/chat/database"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"

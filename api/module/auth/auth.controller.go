@@ -3,9 +3,10 @@ package auth
 import (
 	"strings"
 	"time"
-	"web-chat/config"
-	"web-chat/pkg/response"
-	"web-chat/pkg/validation"
+
+	"github.com/cluster05/chat/config"
+	"github.com/cluster05/chat/pkg/response"
+	"github.com/cluster05/chat/pkg/validation"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"

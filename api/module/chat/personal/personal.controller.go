@@ -1,8 +1,8 @@
 package personal
 
 import (
-	"web-chat/pkg/response"
-	"web-chat/pkg/validation"
+	"github.com/cluster05/chat/pkg/response"
+	"github.com/cluster05/chat/pkg/validation"
 
 	"github.com/gin-gonic/gin"
 )

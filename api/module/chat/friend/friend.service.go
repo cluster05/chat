@@ -3,8 +3,9 @@ package friend
 import (
 	"context"
 	"fmt"
-	"web-chat/database"
-	"web-chat/pkg/mongoquerybuilder"
+
+	"github.com/cluster05/chat/database"
+	"github.com/cluster05/chat/pkg/mongoquerybuilder"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"

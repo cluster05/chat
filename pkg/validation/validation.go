@@ -3,7 +3,8 @@ package validation
 import (
 	"fmt"
 	"strings"
-	"web-chat/pkg/response"
+
+	"github.com/cluster05/chat/pkg/response"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"

@@ -1,7 +1,7 @@
 package friend
 
 import (
-	"web-chat/types"
+	"github.com/cluster05/chat/types"
 )
 
 type AuthRoute interface {

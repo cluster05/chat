@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	"web-chat/api/module/auth"
-	"web-chat/config"
-	"web-chat/pkg/response"
+
+	"github.com/cluster05/chat/api/module/auth"
+	"github.com/cluster05/chat/config"
+	"github.com/cluster05/chat/pkg/response"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
